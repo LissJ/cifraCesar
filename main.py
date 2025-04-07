@@ -20,7 +20,8 @@ if sinal == "-":
 # verifica se o modo escolhido é de codificação
 if modo == "c":
     # transforma cada caractere da 'mensagem' em código ASCII com ord()
-    # depois converte esse número para binário de 8 bits e junta tudo em uma única string binária
+        # depois converte esse número para binário de 8 bits com zeros à esquerda usando :08b
+            # por fim, junta tudo em uma única string binária com "".join()
     binario = "".join(f"{ord(c):08b}" for c in mensagem)
 
     # divide a string binária em blocos de 6 bits, que é o padrão do Base64
@@ -28,22 +29,27 @@ if modo == "c":
 
     # verifica se o último bloco tem menos de 6 bits, e completa com zeros à direita se necessário
     if len(blocos[-1]) < 6:
+        # 'ljust' é uma função que tem como objetivo preencher os espaços vazios com o caractere especificado, até que o texto tenha um total de 6 caracteres
+        # o [-1] seleciona o último bloco da lista, pra verificar se ele tem 6 bits, e caso não tenha, ele aplica a função 'ljust'
         blocos[-1] = blocos[-1].ljust(6, "0")
 
-    # converte cada bloco binário de 6 bits para número inteiro
+    # converte cada bloco binário de 6 bits para número inteiro, base 2
+        # cada bloco representa um número de 0 a 63 (faixa do Base64)
     indices = [int(b, 2) for b in blocos]
 
-    # utiliza cada índice para buscar o caractere correspondente na tabela base64
+    # usa cada número (índice) para buscar o caractere correspondente na tabela_base64
+        # monta a string codificada em Base64 com base nesses índices
     mensagem_base64 = "".join(tabela_base64[i] for i in indices)
 
-    # adiciona o caractere '=' até que a mensagem tenha tamanho múltiplo de 4
+    # enquanto o tamanho da string Base64 não for múltiplo de 4,
+        # adiciona o caractere "=" no final, que é o padding usado pelo padrão Base64
     while len(mensagem_base64) % 4 != 0:
         mensagem_base64 += "="
 
     # exibe a mensagem convertida para base64
     print("Texto em Base64:\n", mensagem_base64)
 
-    # inicializa a variável que vai conter o texto cifrado com a cifra de césar
+    # inicializa a variável que vai conter o texto da cifra de césar
     mensagem_cifrada = ""
 
     # percorre cada letra da mensagem base64
@@ -53,6 +59,7 @@ if modo == "c":
             # pega o índice da letra na tabela
             posicao = tabela_base64.index(letra)
             # aplica o deslocamento informado pelo usuário
+                # utilizando o método 'módulo 64', para que o resultado da posição sempre fique dentro de 64 caracteres (base64)
             nova_posicao = (posicao + deslocamento) % 64
             # pega a nova letra da tabela com a posição deslocada
             nova_letra = tabela_base64[nova_posicao]
@@ -77,6 +84,7 @@ if modo == "d":
             # pega o índice da letra na tabela
             posicao = tabela_base64.index(letra)
             # aplica o deslocamento informado pelo usuário
+                # utilizando o método 'módulo 64', para que o resultado da posição sempre fique dentro de 64 caracteres (base64)
             nova_posicao = (posicao + deslocamento) % 64
             # pega a nova letra da tabela com a posição deslocada
             nova_letra = tabela_base64[nova_posicao]
@@ -86,7 +94,7 @@ if modo == "d":
             # se o caractere não está na tabela (como '='), adiciona ele direto
             mensagem_decifrada += letra
 
-    # exibe o texto resultante após aplicar a cifra de césar
+    # exibe o texto após aplicar a cifra de césar
     print("Texto Base64 decifrado:\n", mensagem_decifrada)
 
     # remove os caracteres '=' do final da string, apenas para o cálculo dos bits
@@ -95,14 +103,23 @@ if modo == "d":
     # converte cada caractere base64 para seu índice correspondente na tabela
     valores = [tabela_base64.index(c) for c in mensagem_sem_padding]
 
-    # transforma cada valor numérico em binário de 6 bits e junta tudo
+    # transforma cada valor da lista 'valores' (que representa os caracteres em base64) em binário de 6 bits com zeros à esquerda,
+        # e depois junta todos esses blocos em uma única string binária que representa toda a mensagem codificada
     binario = "".join(f"{v:06b}" for v in valores)
 
-    # divide o binário total em blocos de 8 bits (1 byte)
+    # divide a string binária gigante em vários pedaços menores de 8 bits (bytes), que representam o caractere original
+        # se i == 0, o binário será quebrado de 0 até 8 bits
+        # se i == 8, o binário será quebrado de 8 até 16 bits
+        # e assim por diante
+            # e para cada i presente no alcance de
+                # 0, que determina o início no primeiro caractere
+                # até o tamanho da string binária (len(binario))
+                # e pulando de 8 em 8 caracteres
+                    # ou seja, a cada iteração que ocorre, ele pula 8 posições
     blocos = [binario[i:i+8] for i in range(0, len(binario), 8)]
 
-    # converte cada bloco de 8 bits para um número decimal, depois para caractere ASCII
+    # converte cada bloco de 8 bits para um número decimal, depois para caractere ASCII, junstando todos os caracteres em uma string só
     texto_original = "".join(chr(int(b, 2)) for b in blocos)
 
-    # exibe o texto original restaurado
+    # exibe o texto original
     print("Texto original:\n", texto_original)
