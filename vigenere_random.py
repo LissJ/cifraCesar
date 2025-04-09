@@ -10,27 +10,6 @@ modo = input('Você deseja codificar ou decodificar? (c/d) ')
 # a variável 'mensagem' armazenará a mensagem inserida pelo usuário
 mensagem = input('Insira a mensagem: ')
 
-# perguntando se o usuário deseja usar uma chave aleatória
-usar_chave_aleatoria = input('Deseja gerar uma chave aleatória? (s/n) ')
-
-# se o usuário quiser uma chave aleatória
-if usar_chave_aleatoria == 's':
-    # pergunta o tamanho desejado da chave
-    tamanho = int(input('Qual o tamanho da chave aleatória? '))
-    # # variável vazia que armazenará a chave aleatória gerada
-    chave = ''
-    # para cada número de 0 até o tamanho desejado da chave
-        # tipo, se for 10, repete 10 vezes
-    for n in range(tamanho):
-        # escolhendo um caractere aleatório do alfabeto local
-            # e iterando esse caractere na variável 'chave'
-        chave += random.choice(alfabeto)
-    print('Chave gerada:', chave)
-# se a pessoa quiser digitar a chave manualmente
-else:
-    # a variável 'chave' armazenará a chave inserida pelo usuário
-    chave = input('Insira a chave: ')
-
 # variável que armazena a chave com a mesma quantidade de caracteres que a mensagem que o usuário escreveu
 chave_expandida = ''
 
@@ -39,6 +18,28 @@ indice = 0
 
 # se a pessoa decidir codificar
 if modo == 'c':
+    # perguntando se o usuário deseja usar uma chave aleatória
+    usar_chave_aleatoria = input('Deseja gerar uma chave aleatória? (s/n) ')
+
+    # se o usuário quiser uma chave aleatória
+    if usar_chave_aleatoria == 's':
+        # perguntando o tamanho desejado da chave e armazenando na variável 'tamanho'
+        tamanho = int(input('Qual o tamanho da chave aleatória? '))
+        # variável vazia que armazenará a chave aleatória gerada
+        chave = ''
+        # para cada número de 0 até o tamanho desejado da chave
+            # tipo, se for 10, repete 10 vezes
+        for n in range(tamanho):
+            # escolhendo um caractere aleatório do alfabeto local
+                # e iterando esse caractere na variável 'chave'
+            chave += random.choice(alfabeto)
+        # imprimindo a chave gerada pela máquina
+        print('Chave gerada:', chave)
+    # se a pessoa quiser digitar a chave manualmente
+    else:
+        # a variável 'chave' armazenará a chave inserida pelo usuário
+        chave = input('Insira a chave: ')
+
     # para cada caractere em mensagem
     for caractere in mensagem:
         # se o caractere estiver dentro do alfabeto local
@@ -58,9 +59,6 @@ if modo == 'c':
     mensagem_codificada = ''
 
     # para cada letra da mensagem, esse 'for' irá percorrer sua posição
-        # como por exemplo: 'amor'
-                        #   range(4)
-                        #   (0, 1, 2, 3)
     for i in range(len(mensagem)):
         # pegando uma letra da mensagem com base na posição dela
         caractere = mensagem[i]
@@ -87,6 +85,9 @@ if modo == 'c':
 
 # se a pessoa decidir decodificar
 elif modo == 'd':
+    # a variável 'chave' armazenará a chave inserida pelo usuário
+    chave = input('Insira a chave: ')
+
     # para cada caractere em mensagem
     for caractere in mensagem:
         # se o caractere estiver dentro do alfabeto local
@@ -112,18 +113,18 @@ elif modo == 'd':
 
         # se o caractere estiver presente no alfabeto local
         if caractere in alfabeto:
-            # # encontrando a posição desse caractere dentro do alfabeto local
+            # encontrando a posição desse caractere dentro do alfabeto local
             pos = alfabeto.index(caractere)
             # fazendo o mesmo para cada letra da 'chave_expandida' (a chave que foi expandida previamente)
             pos_chave = alfabeto.index(chave_expandida[i])
             # subtraindo (oposto ao codificador) a posição da letra da mensagem com a posição da letra da chave
                 # utilizando o módulo para dar a volta no alfabeto e reiniciar, caso ele atinja o final
             nova_pos = (pos - pos_chave) % len(alfabeto)
-            # pegando a letra da nova posição calculada e adicionando na variável 'mensagem_codificada'
+            # pegando a letra da nova posição calculada e adicionando na variável 'mensagem_decodificada'
             mensagem_decodificada += alfabeto[nova_pos]
         # se não estiver no alfabeto local
         else:
-            # apenas adicionar o caractere na 'mensagem_codificada' direto 
+            # apenas adicionar o caractere na 'mensagem_decodificada' direto 
             mensagem_decodificada += caractere
 
     # imprimindo a mensagem decodificada
