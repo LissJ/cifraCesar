@@ -7,7 +7,7 @@ print('--------------------------------------------'
       '\n--------------------------------------------')
 
 # atribuindo um valor para a variável 'mensagem', que o próprio usuário insere
-# a função 'lower()' serve para que todos os caracteres se padronizem, fazendo com que sejam apenas letras minúsculas
+      # a função 'lower()' serve para que todos os caracteres se padronizem, fazendo com que sejam apenas letras minúsculas
 mensagem = input('Insira uma frase: ')
 
 # crio uma condição de erro
