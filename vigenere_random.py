@@ -10,16 +10,20 @@ modo = input('Você deseja codificar ou decodificar? (c/d) ')
 # a variável 'mensagem' armazenará a mensagem inserida pelo usuário
 mensagem = input('Insira a mensagem: ')
 
-# pergunta se o usuário deseja usar uma chave aleatória
+# perguntando se o usuário deseja usar uma chave aleatória
 usar_chave_aleatoria = input('Deseja gerar uma chave aleatória? (s/n) ')
 
-# se a pessoa quiser uma chave aleatória
+# se o usuário quiser uma chave aleatória
 if usar_chave_aleatoria == 's':
     # pergunta o tamanho desejado da chave
     tamanho = int(input('Qual o tamanho da chave aleatória? '))
-    # gera a chave com caracteres aleatórios do alfabeto
+    # # variável vazia que armazenará a chave aleatória gerada
     chave = ''
-    for _ in range(tamanho):
+    # para cada número de 0 até o tamanho desejado da chave
+        # tipo, se for 10, repete 10 vezes
+    for n in range(tamanho):
+        # escolhendo um caractere aleatório do alfabeto local
+            # e iterando esse caractere na variável 'chave'
         chave += random.choice(alfabeto)
     print('Chave gerada:', chave)
 # se a pessoa quiser digitar a chave manualmente
